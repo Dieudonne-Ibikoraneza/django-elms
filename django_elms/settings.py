@@ -109,7 +109,7 @@ AUTH_USER_MODEL = 'users.User'
 
 # Login/Logout Redirects
 LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'users:login'
 
 # Tailwind
 TAILWIND_APP_NAME = 'theme'
