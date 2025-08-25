@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}My Profile - ELMS{% endblock %}
+{% block content %}
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md mt-8">
+        <h1 class="text-2xl font-bold mb-6 text-center">My Profile</h1>
+
+        <!-- Profile Information -->
+        <div class="mb-8">
+            <div class="flex items-center space-x-4">
+                {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" alt="Profile Picture" class="w-24 h-24 rounded-full object-cover">
+                {% else %}
+                    <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500">No Avatar</span>
+                    </div>
+                {% endif %}
+                <div>
+                    <h2 class="text-xl font-semibold">{{ user.get_full_name|default:user.username }}</h2>
+                    <p class="text-gray-600">{{ user.email }}</p>
+                    <p class="text-gray-600">Role: {{ user.get_role_display }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Form -->
+        <div>
+            <h2 class="text-xl font-semibold mb-4">Update Profile</h2>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="bg-{{ message.tags }}-100 text-{{ message.tags }}-800 p-4 mb-4 rounded border border-{{ message.tags }}-300">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% if form.errors %}
+                <div class="bg-red-100 text-red-800 p-4 mb-4 rounded border border-red-300">
+                    Please correct the errors below.
+                </div>
+            {% endif %}
+            <form method="post" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" name="{{ form.first_name.name }}" id="{{ form.first_name.id_for_label }}" value="{{ form.first_name.value|default_if_none:'' }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    {% if form.first_name.errors %}
+                        <p class="text-red-600 text-sm">{{ form.first_name.errors }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" name="{{ form.last_name.name }}" id="{{ form.last_name.id_for_label }}" value="{{ form.last_name.value|default_if_none:'' }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    {% if form.last_name.errors %}
+                        <p class="text-red-600 text-sm">{{ form.last_name.errors }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" value="{{ form.email.value|default_if_none:'' }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                    {% if form.email.errors %}
+                        <p class="text-red-600 text-sm">{{ form.email.errors }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.bio.id_for_label }}" class="block text-sm font-medium text-gray-700">Bio</label>
+                    <textarea name="{{ form.bio.name }}" id="{{ form.bio.id_for_label }}" rows="4" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600">{{ form.bio.value|default_if_none:'' }}</textarea>
+                    {% if form.bio.errors %}
+                        <p class="text-red-600 text-sm">{{ form.bio.errors }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.avatar.id_for_label }}" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+                    <input type="file" name="{{ form.avatar.name }}" id="{{ form.avatar.id_for_label }}" accept="image/*" class="w-full p-2 border rounded">
+                    {% if form.avatar.errors %}
+                        <p class="text-red-600 text-sm">{{ form.avatar.errors }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.phone.id_for_label }}" class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input type="text" name="{{ form.phone.name }}" id="{{ form.phone.id_for_label }}" value="{{ form.phone.value|default_if_none:'' }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    {% if form.phone.errors %}
+                        <p class="text-red-600 text-sm">{{ form.phone.errors }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.date_of_birth.id_for_label }}" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                    <input type="date" name="{{ form.date_of_birth.name }}" id="{{ form.date_of_birth.id_for_label }}" value="{{ form.date_of_birth.value|default_if_none:'' }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    {% if form.date_of_birth.errors %}
+                        <p class="text-red-600 text-sm">{{ form.date_of_birth.errors }}</p>
+                    {% endif %}
+                </div>
+                <div class="flex space-x-4">
+                    <button type="submit" class="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition">Update Profile</button>
+                    <a href="{% url 'users:dashboard' %}" class="bg-gray-600 text-white p-2 rounded hover:bg-gray-700 transition">Back to Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
