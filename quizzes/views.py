@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from .models import Quiz, QuizAttempt, StudentAnswer, Answer
 from .forms import QuizForm
 from courses.models import Course, Enrollment
-from notifications.models import Notification
+from users.models import Notification
 
 @login_required
 def quiz_take(request, quiz_pk):

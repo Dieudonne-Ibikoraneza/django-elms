@@ -8,7 +8,7 @@ from django.utils import timezone
 from .models import Course, Enrollment, Lesson, LessonProgress
 from .forms import CourseForm
 from users.views import is_instructor
-from notifications.models import Notification
+from users.models import Notification
 
 class CourseListView(ListView):
     model = Course
