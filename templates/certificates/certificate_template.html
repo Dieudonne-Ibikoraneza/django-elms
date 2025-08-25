@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Certificate of Completion</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      .certificate {
+        border: 5px solid #ffd700;
+        padding: 20px;
+        margin: 20px;
+      }
+      .title {
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .details {
+        font-size: 18px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="certificate">
+      <h1 class="title">Certificate of Completion</h1>
+      <p class="details">This certifies that</p>
+      <h2>{{ student.get_full_name }}</h2>
+      <p class="details">has successfully completed the course</p>
+      <h2>{{ course.title }}</h2>
+      <p class="details">Issued on: {{ issued_at|date:"F d, Y" }}</p>
+      <p class="details">Certificate ID: {{ certificate_id }}</p>
+    </div>
+  </body>
+</html>

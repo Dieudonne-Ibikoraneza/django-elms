@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Courses - ELMS{% endblock %}
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4">Available Courses</h1>
+    <form method="get" class="mb-4">
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Search courses..." class="border p-2 rounded">
+        <select name="category" class="border p-2 rounded">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category.slug }}" {% if selected_category == category.slug %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="level" class="border p-2 rounded">
+            <option value="">All Levels</option>
+            {% for level, name in levels %}
+                <option value="{{ level }}" {% if selected_level == level %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Filter</button>
+    </form>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {% for course in courses %}
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-xl font-semibold">{{ course.title }}</h2>
+                <p>{{ course.description|truncatewords:20 }}</p>
+                <p>Instructor: {{ course.instructor.username }}</p>
+                <p>Level: {{ course.get_level_display }}</p>
+                <a href="{% url 'courses:course_detail' course.pk %}" class="text-blue-600 hover:underline">View Details</a>
+            </div>
+        {% empty %}
+            <p>No courses found.</p>
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+        <div class="mt-4">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 bg-blue-600 text-white rounded">Previous</a>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 bg-blue-600 text-white rounded">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

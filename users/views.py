@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import User
+from .models import User, Notification
 from .forms import CustomUserCreationForm, ProfileUpdateForm
 from courses.models import Course, Enrollment
 
@@ -53,10 +53,12 @@ def dashboard_view(request):
     
     else:  # student
         enrollments = Enrollment.objects.filter(student=user).select_related('course')
+        notifications = Notification.objects.filter(user=user, read=False)[:5]  # Show 5 unread notifications
         context.update({
             'my_enrollments': enrollments,
             'completed_courses': enrollments.filter(completed_at__isnull=False),
             'in_progress_courses': enrollments.filter(completed_at__isnull=True),
+            'notifications': notifications,
         })
         return render(request, 'users/dashboard/student_dashboard.html', context)
 

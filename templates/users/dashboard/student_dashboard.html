@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Student Dashboard - ELMS{% endblock %}
+{% block content %}
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Welcome, {{ user.get_full_name|default:user.username }}!</h1>
+
+        <!-- Quick Links -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Quick Links</h2>
+            <div class="flex space-x-4">
+                <a href="{% url 'courses:course_list' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Browse Courses</a>
+                <a href="{% url 'users:profile' %}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">My Profile</a>
+                <a href="{% url 'notifications:notification_list' %}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">View All Notifications</a>
+            </div>
+        </div>
+
+        <!-- Enrolled Courses -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">My Enrolled Courses</h2>
+            {% if my_enrollments %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for enrollment in my_enrollments %}
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-semibold">{{ enrollment.course.title }}</h3>
+                            <p class="text-gray-600">Instructor: {{ enrollment.course.instructor.username }}</p>
+                            <p class="text-gray-600">Progress: {{ enrollment.progress_percentage|floatformat:1 }}%</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style=`width: {{ enrollment.progress_percentage }}%`></div>
+                            </div>
+                            <div class="mt-4 flex space-x-2">
+                                <a href="{% url 'courses:course_learn' enrollment.course.pk %}" class="text-blue-600 hover:underline">Continue Learning</a>
+                                {% if enrollment.certificate_issued %}
+                                    <a href="{% url 'certificates:generate_certificate' enrollment.pk %}" class="text-green-600 hover:underline">View Certificate</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-600">You are not enrolled in any courses yet. <a href="{% url 'courses:course_list' %}" class="text-blue-600 hover:underline">Browse courses</a> to get started!</p>
+            {% endif %}
+        </div>
+
+        <!-- Completed Courses -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Completed Courses</h2>
+            {% if completed_courses %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for enrollment in completed_courses %}
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-semibold">{{ enrollment.course.title }}</h3>
+                            <p class="text-gray-600">Completed on: {{ enrollment.completed_at|date:"F d, Y" }}</p>
+                            <a href="{% url 'certificates:generate_certificate' enrollment.pk %}" class="text-green-600 hover:underline">Download Certificate</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-600">You haven't completed any courses yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Recent Notifications -->
+        <div>
+            <h2 class="text-2xl font-semibold mb-4">Recent Notifications</h2>
+            {% if notifications %}
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <ul class="space-y-4">
+                        {% for notification in notifications %}
+                            <li class="notification-item border-b pb-2" data-notification-id="{{ notification.id }}">
+                                <p class="font-semibold">{{ notification.title }}</p>
+                                <p class="text-gray-600">{{ notification.message }}</p>
+                                <p class="text-sm text-gray-500">{{ notification.created_at|date:"F d, Y H:i" }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'notifications:notification_list' %}" class="text-blue-600 hover:underline mt-4 inline-block">View All Notifications</a>
+                </div>
+            {% else %}
+                <p class="text-gray-600">No new notifications.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

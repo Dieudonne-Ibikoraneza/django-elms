@@ -27,6 +27,9 @@ INSTALLED_APPS = [
     'discussions',
     'notifications',
     'certificates',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
 ]
 
 MIDDLEWARE = [
@@ -107,3 +110,6 @@ AUTH_USER_MODEL = 'users.User'
 # Login/Logout Redirects
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
+
+# Tailwind
+TAILWIND_APP_NAME = 'theme'

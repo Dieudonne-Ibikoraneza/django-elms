@@ -9,6 +9,7 @@ from .models import Course, Enrollment, Lesson, LessonProgress
 from .forms import CourseForm
 from users.views import is_instructor
 from users.models import Notification
+from courses.models import Category
 
 class CourseListView(ListView):
     model = Course
